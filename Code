@@ -1,1 +1,152 @@
+#include <iostream>
+using namespace std;
+
+class Dynamic_Array {
+private:
+    int size;
+    int n;
+    int* array;
+
+public:
+    Dynamic_Array() {
+        this->size = 1;
+        this->n = 0;
+        this->array = make_array(this->size);
+    }
+
+    int* make_array(int value) {
+        return new int[value]();
+    }
+
+    void len() {                 // Operation 1 length
+        cout << this->n <<endl;
+    }
+
+     append(int value) {     // Operation 2 append
+    	
+        if (this->n == this->size) {
+        	//resize array
+            resize_array(this->size * 2);
+        }
+		
+		//append
+        this->array[this->n] = value;
+        this->n++;
+    }
+
+    void resize_array(int new_capacity) {
+        int* array_2 = make_array(new_capacity);
+
+        for (int i = 0; i < this->n; i++) {
+            array_2[i] = this->array[i];
+        }
+
+        delete[] this->array; // Delete the old array to avoid memory leak
+        this->array = array_2;
+        this->size = new_capacity;
+    }
+    
+    	 //print elements
+        // Overload the << operator to print the Dynamic_Array
+    friend ostream& operator<<(ostream& os, const Dynamic_Array& dynamic_array) {    // Operation 3 print
+        os << "[";
+        for (int i = 0; i < dynamic_array.n; i++) {
+            os << dynamic_array.array[i];
+            if (i < dynamic_array.n - 1) {
+                os << ", ";
+            }
+        }
+        os << "]\n";
+        return os;
+    }
+    
+    //Indexing
+    void getItem(int index){                        // Operation 4 get Item using Idex
+    	if (index >= 0 && index < this->n){
+    		cout<<this->array[index] <<endl;
+		}
+    	else{
+    		cout<<"'IndexError - Index out of range'" <<endl;
+    		
+		}
+	}
+	
+	//Pop
+	void pop(){                                    // Operation 5 Pop element
+		if (this->n == 0){
+			cout<<"Array is Empty\n";
+		}
+		cout<<this->array[this->n-1] <<endl;
+		this->n = this->n-1;	
+	}
+	
+	//clear
+	void clear(){    // Operation 6 clear array
+		this->n = 0; 
+		this->size = 1;
+	}
+	
+	//Find
+	void find(int value){     //operation 7 Find element
+	bool found = false;
+		for(int i = 0; i < this->n; i++){
+			if (this->array[i] == value){
+				cout<< i <<endl;
+				found = true;
+			}	
+		}
+		if(!found){
+			cout<< "'ValueError - not in array'" <<endl;
+		}
+	}
+	
+	// Insert
+	void insert(int position, int value) {             // Operation 8 insert at certain index
+    if (this->n == this->size) {
+        this->resize_array(this->size * 2);
+    }
+
+    // Check if the position is valid
+    if (position < 0 || position > this->n) {
+        cout << "Invalid position" << endl;
+        return;  // Exit the function if the position is not valid
+    }
+
+    // Move elements to create space for the new value
+    for (int i = this->n; i > position; i--) {
+        this->array[i] = this->array[i - 1];
+    }
+
+    this->array[position] = value;
+    this->n = this->n + 1;
+}
+
+	//Delete
+	void del(int position){       // Operation 9 delete element by using its index
+		if(this->n == 0 && this->size == 1){
+			cout<< "Empty Array " <<endl;
+		}
+		else if(position >= this->n){ return;}  //if position is greater then elements, exit the function
+		
+		else{
+		for(int i = position; i < this->n; i++){
+			this->array[i] = this->array[i + 1];
+			
+		}
+		this->n = this->n - 1;
+	}
+}
+
+		
+    ~Dynamic_Array() {
+    delete[] this->array; // Destructor to free memory when the object is destroyed
+    }
+};
+
+int main() {
+    Dynamic_Array array;
+	// Array Operations here
+    
+    return 0;
+}
 
